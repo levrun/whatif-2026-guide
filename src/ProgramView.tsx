@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { PROGRAM, type ProgramEvent } from './programData'
+import { PROGRAM_RU } from './programRu'
 
 const DAY_LABELS: Record<ProgramEvent['day'], string> = {
   Thursday: 'Чт 23.07',
@@ -47,6 +48,7 @@ export default function ProgramView({ onShowMap }: Props) {
   const [day, setDay] = useState<ProgramEvent['day']>('Friday')
   const [onlyPicks, setOnlyPicks] = useState(false)
   const [query, setQuery] = useState('')
+  const [expanded, setExpanded] = useState<number | null>(null)
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -62,7 +64,7 @@ export default function ProgramView({ onShowMap }: Props) {
     <div className="program">
       <p className="program-note">
         Полная программа из официального гайда What Where When (family-издание) —{' '}
-        {PROGRAM.length} событий. Номера площадок соответствуют легенде карты.
+        {PROGRAM.length} событий. Номера площадок соответствуют легенде карты. Наведи мышь (или тапни) на событие — появится русский перевод и контекст.
       </p>
 
       <div className="day-filter program-days">
@@ -98,8 +100,14 @@ export default function ProgramView({ onShowMap }: Props) {
         )}
         {filtered.map((e, i) => {
           const pick = PICKS[e.title]
+          const ru = PROGRAM_RU[e.title]
+          const isOpen = expanded === i
           return (
-            <div key={i} className={`prog-event ${pick ? 'prog-pick' : ''}`}>
+            <div
+              key={i}
+              className={`prog-event ${pick ? 'prog-pick' : ''} ${ru ? 'prog-has-ru' : ''} ${isOpen ? 'prog-open' : ''}`}
+              onClick={() => ru && setExpanded(isOpen ? null : i)}
+            >
               <div className="prog-time">{timeBadge(e.time)}</div>
               <div className="prog-body">
                 <div className="prog-title-row">
@@ -107,6 +115,7 @@ export default function ProgramView({ onShowMap }: Props) {
                     {pick && '⭐ '}
                     {e.title}
                   </span>
+                  {ru && <span className="badge badge-ru">🇷🇺</span>}
                 </div>
                 {pick && <div className="prog-pick-note">💡 {pick}</div>}
                 {e.venue && (
@@ -114,13 +123,25 @@ export default function ProgramView({ onShowMap }: Props) {
                     📍 {e.venue}
                     {e.mapLabel && <span className="prog-mapnum"> · {e.mapLabel} на карте</span>}
                     {e.mapId && (
-                      <button className="map-link prog-maplink" onClick={() => onShowMap(e.mapId!)}>
+                      <button
+                        className="map-link prog-maplink"
+                        onClick={(ev) => {
+                          ev.stopPropagation()
+                          onShowMap(e.mapId!)
+                        }}
+                      >
                         🗺️ на карте
                       </button>
                     )}
                   </div>
                 )}
                 <div className="prog-desc">{e.desc}</div>
+                {ru && (
+                  <div className="prog-ru">
+                    <div className="prog-ru-text">🇷🇺 {ru.ru}</div>
+                    {ru.story && <div className="prog-ru-story">📖 {ru.story}</div>}
+                  </div>
+                )}
               </div>
             </div>
           )
