@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { DAYS, GUIDES, type DayEvent } from './data'
 import MapView from './MapView'
+import ProgramView from './ProgramView'
 
 const KIND_META: Record<DayEvent['kind'], { label: string; className: string }> = {
   shift: { label: 'Смена', className: 'badge badge-shift' },
@@ -48,7 +49,7 @@ function EventCard({ ev, onShowMap }: { ev: DayEvent; onShowMap: (id: string) =>
 
 export default function App() {
   const [activeDay, setActiveDay] = useState<string>('all')
-  const [tab, setTab] = useState<'schedule' | 'map'>('schedule')
+  const [tab, setTab] = useState<'schedule' | 'program' | 'map'>('schedule')
   const [focusId, setFocusId] = useState<string | null>(null)
 
   const visibleDays = activeDay === 'all' ? DAYS : DAYS.filter((d) => d.id === activeDay)
@@ -80,6 +81,12 @@ export default function App() {
           📅 Расписание
         </button>
         <button
+          className={tab === 'program' ? 'tab-btn active' : 'tab-btn'}
+          onClick={() => setTab('program')}
+        >
+          🎪 Программа
+        </button>
+        <button
           className={tab === 'map' ? 'tab-btn active' : 'tab-btn'}
           onClick={() => setTab('map')}
         >
@@ -89,6 +96,8 @@ export default function App() {
 
       {tab === 'map' ? (
         <MapView focusId={focusId} />
+      ) : tab === 'program' ? (
+        <ProgramView onShowMap={showOnMap} />
       ) : (
         <>
           <section className="guides">
