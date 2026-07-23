@@ -312,56 +312,55 @@ body {
   margin-top: 5px;
 }
 
-/* Russian translation reveal: hover on desktop, tap (prog-open) on touch */
-.prog-ru {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.25s ease, opacity 0.2s ease, margin-top 0.2s ease;
-  margin-top: 0;
+/* Glossary word tooltips */
+.glossary-word {
+  border-bottom: 1px dotted var(--blue);
+  cursor: help;
+  position: relative;
 }
 
-@media (hover: hover) {
-  .prog-has-ru:hover .prog-ru {
-    max-height: 500px;
-    opacity: 1;
-    margin-top: 8px;
-  }
+/* Native title tooltip is used; for better UX on mobile we could add
+   CSS-only ::after but native title is simplest and consistent */
+
+/* Overlap groups */
+.prog-group {
+  position: relative;
 }
 
-.prog-open .prog-ru {
-  max-height: 500px;
-  opacity: 1;
-  margin-top: 8px;
+.prog-overlap {
+  padding-left: 12px;
 }
 
-.prog-has-ru {
-  cursor: pointer;
+.prog-overlap-bar {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  border-radius: 4px;
+  background: var(--accent);
+  opacity: 0.6;
 }
 
-.prog-ru-text {
-  background: rgba(122, 184, 217, 0.1);
-  border-left: 3px solid var(--blue);
-  border-radius: 0 8px 8px 0;
-  padding: 8px 12px;
-  font-size: 0.88rem;
-  color: var(--text);
+.prog-group-events {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.prog-ru-story {
-  background: rgba(255, 200, 87, 0.08);
-  border-left: 3px solid var(--gold);
-  border-radius: 0 8px 8px 0;
-  padding: 8px 12px;
-  font-size: 0.84rem;
-  color: var(--muted);
-  margin-top: 6px;
+/* Title tooltip via native title attr */
+.prog-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: help;
 }
 
 .badge-ru {
   background: rgba(122, 184, 217, 0.18);
   color: var(--blue);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 @media (max-width: 560px) {
