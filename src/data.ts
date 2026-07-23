@@ -1,4 +1,4 @@
-export type EventKind = 'shift' | 'main' | 'event' | 'food' | 'info'
+export type EventKind = 'shift' | 'main' | 'event' | 'food' | 'info' | 'dance'
 
 export interface DayEvent {
   time: string
@@ -50,6 +50,14 @@ export const DAYS: FestivalDay[] = [
         kind: 'food',
       },
       {
+        time: '17:30–18:30',
+        title: 'Kizomba — урок танца + social 💃',
+        place: 'Mystic Lounge',
+        description:
+          'Парный танец из Анголы для Кати и Лёши перед сменой: «Feel the energy, listen to the heart». Показывают с нуля.',
+        kind: 'dance',
+      },
+      {
         time: '19:00',
         title: 'Открывается чек-ин на смену',
         description: 'Отметиться в приложении Vome или на портале за час до начала.',
@@ -63,6 +71,14 @@ export const DAYS: FestivalDay[] = [
           'Встречаем приезжающих: проверка билетов, браслеты, «Welcome home!». Команда большая, английский простой и повторяющийся. Трезвая смена. Обучение на месте, до ворот довозят.',
         kind: 'shift',
         booked: true,
+      },
+      {
+        time: '23:30–02:00',
+        title: 'Ночные данс-флоры после смены 🌙',
+        place: 'По всей плайе',
+        description:
+          'Смена кончилась — танцы только начинаются! Ищите Chasing Pussy Noodle Bar на «random dance floors»: лапша + танцы до 2 ночи.',
+        kind: 'dance',
       },
     ],
   },
@@ -97,12 +113,36 @@ export const DAYS: FestivalDay[] = [
         kind: 'info',
       },
       {
+        time: '12:00–16:00',
+        title: 'Snowcone Dance Party 💃',
+        place: 'The Really Lost Penguins',
+        description:
+          'Танцы под DJ и живую MEWзыку со снежными конусами. Свободный непарный дэнс — заходим когда хотим.',
+        kind: 'dance',
+      },
+      {
+        time: '13:30–14:30',
+        title: 'Twerkshop! 💃',
+        place: 'Silly Hat Society',
+        description:
+          '«Shake what your mama gave yah!» — beginner friendly, весёлый и непарный урок тверка от Kelsey и Zara.',
+        kind: 'dance',
+      },
+      {
         time: '14:00–16:00',
         title: 'Floatie Races — гонки на надувнушках ⭐',
         place: 'Река, старт у моста',
         description:
           'Матрасы дают, призы и фризи. Знакомство через игру — английский не нужен.',
         kind: 'event',
+      },
+      {
+        time: '15:00–16:30',
+        title: 'Fusion Partner Dancing 💃',
+        place: "The Cat's Pajamas",
+        description:
+          'Парные танцы в носках в уютном крытом данс-спейсе — для настроения «иногда в паре можно». Показывают с нуля.',
+        kind: 'dance',
       },
       {
         time: '16:00–18:00',
@@ -113,19 +153,27 @@ export const DAYS: FestivalDay[] = [
         kind: 'event',
       },
       {
+        time: '19:00–22:00',
+        title: 'Saturday DJ Lineup',
+        place: 'Silly Hat Society',
+        description: 'Разогрев перед церемонией: Vene C → Nix → Matty Reed.',
+        kind: 'dance',
+      },
+      {
         time: '22:00–23:30',
-        title: 'The «Burn» Ceremony — церемония эффигии',
+        title: 'The «Burn» Ceremony + Effigy Afterparty',
         place: 'Эффигия (34 фута)',
         description:
-          'Кульминация фестиваля: перформанс, поднятие рук «the Man», LED-шоу вместо огня (сжигать нельзя по договору с площадкой) и афтепати. «This is not to be missed!»',
+          'Кульминация фестиваля: перформанс, поднятие рук «the Man», LED-шоу вместо огня (сжигать нельзя по договору с площадкой) — и сразу афтепати: «shake your booty during the Effigy afterparty!»',
         kind: 'main',
       },
       {
         time: '23:30–00:30',
-        title: 'Midnight Sharkcuterie',
+        title: 'Midnight Sharkcuterie + танцы у Ravebots',
         place: 'Ravebots (Aurora on the River)',
-        description: 'Ночной пир сразу после церемонии + DJ. Еда с маркировкой, есть GF/безлактозные опции.',
-        kind: 'food',
+        description:
+          'Ночной пир сразу после церемонии: DJ Red Dragon и DJ Tango «serving up some tasty beats». Танцуем до упаду, лапша на данс-флорах до 2:00.',
+        kind: 'dance',
       },
     ],
   },
@@ -144,6 +192,14 @@ export const DAYS: FestivalDay[] = [
         kind: 'food',
       },
       {
+        time: '11:00–12:30',
+        title: 'Brunch and Beats — танцы под 80-е 💃',
+        place: 'Aurora on the River',
+        description:
+          'DJ Starrdust с хитами 80-х + drag-шоу Lesley Eve. Французские тосты, блины, мимозы — танцуем с вилкой в руке.',
+        kind: 'dance',
+      },
+      {
         time: '13:00–14:30',
         title: 'Tea Monk ⭐',
         place: 'Странствующий — ищите ковёр',
@@ -158,6 +214,14 @@ export const DAYS: FestivalDay[] = [
         description:
           'Разбираем и пересобираем плюшевых мишек во франкенштейнов. Весёлое парное безумие.',
         kind: 'event',
+      },
+      {
+        time: '13:00–15:00',
+        title: 'Contact Improv 💃 (для Лёши)',
+        place: 'Cult Cafe',
+        description:
+          'Контактная импровизация от Cult Cafe — той же команды, что делала экстатик-данс в четверг. Свободное движение, ближайшее к экстатику в наши дни (сам Ecstatic Dance был в четверг до приезда). All levels welcome.',
+        kind: 'dance',
       },
       {
         time: '14:30–15:30',
@@ -214,6 +278,7 @@ export interface GuideLink {
   description: string
   size: string
   emoji: string
+  image: string
 }
 
 export const GUIDES: GuideLink[] = [
@@ -224,6 +289,7 @@ export const GUIDES: GuideLink[] = [
       'Официальный гайд фестиваля: все 141 событие, лагеря и арт по дням (family-friendly издание, 30 стр.)',
     size: '3.5 МБ',
     emoji: '📖',
+    image: 'guide-www-art.png',
   },
   {
     file: 'Temple-Guardians-Guidebook.pdf',
@@ -232,5 +298,6 @@ export const GUIDES: GuideLink[] = [
       'Официальная методичка Хранителя Храма: философия, обязанности, что взять на смену (4 стр.)',
     size: '105 КБ',
     emoji: '🏛️',
+    image: 'guide-guardian-logo.jpg',
   },
 ]

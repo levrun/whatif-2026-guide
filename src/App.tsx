@@ -7,12 +7,13 @@ const KIND_META: Record<DayEvent['kind'], { label: string; className: string }> 
   event: { label: 'Событие', className: 'badge badge-event' },
   food: { label: 'Еда', className: 'badge badge-food' },
   info: { label: 'Инфо', className: 'badge badge-info' },
+  dance: { label: 'Танцы', className: 'badge badge-dance' },
 }
 
 function EventCard({ ev }: { ev: DayEvent }) {
   const meta = KIND_META[ev.kind]
   return (
-    <div className={`event ${ev.kind === 'shift' ? 'event-shift' : ''} ${ev.kind === 'main' ? 'event-main' : ''}`}>
+    <div className={`event ${ev.kind === 'shift' ? 'event-shift' : ''} ${ev.kind === 'main' ? 'event-main' : ''} ${ev.kind === 'dance' ? 'event-dance' : ''}`}>
       <div className="event-time">{ev.time}</div>
       <div className="event-body">
         <div className="event-title-row">
@@ -54,9 +55,16 @@ export default function App() {
               href={`${import.meta.env.BASE_URL}${g.file}`}
               download={g.file}
             >
-              <div className="guide-emoji">{g.emoji}</div>
+              <img
+                className="guide-thumb"
+                src={`${import.meta.env.BASE_URL}${g.image}`}
+                alt={g.title}
+                loading="lazy"
+              />
               <div>
-                <div className="guide-title">{g.title}</div>
+                <div className="guide-title">
+                  {g.emoji} {g.title}
+                </div>
                 <div className="guide-desc">{g.description}</div>
                 <div className="guide-size">⬇️ Скачать PDF · {g.size}</div>
               </div>

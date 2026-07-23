@@ -92,6 +92,16 @@ body {
   line-height: 1;
 }
 
+.guide-thumb {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  background: #fff;
+}
+
 .guide-title {
   font-weight: 700;
 }
@@ -196,6 +206,11 @@ body {
   background: rgba(255, 200, 87, 0.1);
 }
 
+.event-dance {
+  border-color: var(--pink);
+  background: rgba(224, 139, 184, 0.08);
+}
+
 .event-time {
   min-width: 96px;
   font-weight: 700;
@@ -271,6 +286,11 @@ body {
 .badge-booked {
   background: rgba(125, 201, 143, 0.18);
   color: var(--green);
+}
+
+.badge-dance {
+  background: var(--pink);
+  color: #2a0d1d;
 }
 
 /* Footer */
