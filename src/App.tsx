@@ -14,6 +14,18 @@ function EventCard({ ev }: { ev: DayEvent }) {
   const meta = KIND_META[ev.kind]
   return (
     <div className={`event ${ev.kind === 'shift' ? 'event-shift' : ''} ${ev.kind === 'main' ? 'event-main' : ''} ${ev.kind === 'dance' ? 'event-dance' : ''}`}>
+      {ev.image ? (
+        <img
+          className="event-thumb"
+          src={`${import.meta.env.BASE_URL}${ev.image}`}
+          alt=""
+          loading="lazy"
+        />
+      ) : (
+        <div className="event-thumb event-thumb-empty" aria-hidden="true">
+          {ev.kind === 'shift' ? '🎫' : '🏕️'}
+        </div>
+      )}
       <div className="event-time">{ev.time}</div>
       <div className="event-body">
         <div className="event-title-row">

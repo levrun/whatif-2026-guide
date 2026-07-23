@@ -7,6 +7,7 @@ export interface DayEvent {
   description: string
   kind: EventKind
   booked?: boolean
+  image?: string
 }
 
 export interface FestivalDay {
@@ -33,6 +34,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Заезд через ворота: билеты, браслеты, проверка машины. Говорим «It’s our first burn!» — новичкам все рады.',
         kind: 'info',
+        image: 'ev/arrival.png',
       },
       {
         time: '16:00–19:00',
@@ -40,6 +42,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Палатка, тень, вода. Запас времени до смены — без спешки.',
         kind: 'info',
+        image: 'ev/camp.jpg',
       },
       {
         time: '17:30–19:30',
@@ -48,6 +51,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'В день смены кормят бесплатно: сначала берём Meal Sticker в Volunteer Hub, потом идём в Commissary.',
         kind: 'food',
+        image: 'ev/commissary.jpg',
       },
       {
         time: '17:30–18:30',
@@ -56,6 +60,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Парный танец из Анголы для Кати и Лёши перед сменой: «Feel the energy, listen to the heart». Показывают с нуля.',
         kind: 'dance',
+        image: 'ev/kizomba.png',
       },
       {
         time: '19:00',
@@ -79,6 +84,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Смена кончилась — танцы только начинаются! Ищите Chasing Pussy Noodle Bar на «random dance floors»: лапша + танцы до 2 ночи.',
         kind: 'dance',
+        image: 'ev/nightdance.jpg',
       },
     ],
   },
@@ -96,6 +102,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Французские тосты, блины, мимозы + drag-шоу. Можно просто смотреть.',
         kind: 'food',
+        image: 'ev/brunch.jpg',
       },
       {
         time: '11:00–12:00',
@@ -104,6 +111,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Учат польке с нуля. «Партнёр не обязателен, есть бесконтактные варианты» — идеально для скромных.',
         kind: 'event',
+        image: 'ev/polka.jpg',
       },
       {
         time: '12:00',
@@ -111,6 +119,7 @@ export const DAYS: FestivalDay[] = [
         place: 'Слева от Battery Library (North Camp #1)',
         description: 'Пакеты по 7 фунтов, разбирают за час. Приходить к 12:00.',
         kind: 'info',
+        image: 'ev/ice.jpg',
       },
       {
         time: '12:00–16:00',
@@ -119,6 +128,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Танцы под DJ и живую MEWзыку со снежными конусами. Свободный непарный дэнс — заходим когда хотим.',
         kind: 'dance',
+        image: 'ev/snowcone.jpg',
       },
       {
         time: '13:30–14:30',
@@ -127,6 +137,7 @@ export const DAYS: FestivalDay[] = [
         description:
           '«Shake what your mama gave yah!» — beginner friendly, весёлый и непарный урок тверка от Kelsey и Zara.',
         kind: 'dance',
+        image: 'ev/twerkshop.jpg',
       },
       {
         time: '14:00–16:00',
@@ -135,6 +146,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Матрасы дают, призы и фризи. Знакомство через игру — английский не нужен.',
         kind: 'event',
+        image: 'ev/floatie.jpg',
       },
       {
         time: '15:00–16:30',
@@ -143,6 +155,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Парные танцы в носках в уютном крытом данс-спейсе — для настроения «иногда в паре можно». Показывают с нуля.',
         kind: 'dance',
+        image: 'ev/fusion.jpg',
       },
       {
         time: '16:00–18:00',
@@ -151,6 +164,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Тема года — «What If: Cat If?» 🐱. Делаем ушки/хвосты — готовим костюмы к вечерней церемонии.',
         kind: 'event',
+        image: 'ev/kitten.jpg',
       },
       {
         time: '19:00–22:00',
@@ -158,6 +172,7 @@ export const DAYS: FestivalDay[] = [
         place: 'Silly Hat Society',
         description: 'Разогрев перед церемонией: Vene C → Nix → Matty Reed.',
         kind: 'dance',
+        image: 'ev/djlineup.jpg',
       },
       {
         time: '22:00–23:30',
@@ -166,6 +181,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Кульминация фестиваля: перформанс, поднятие рук «the Man», LED-шоу вместо огня (сжигать нельзя по договору с площадкой) — и сразу афтепати: «shake your booty during the Effigy afterparty!»',
         kind: 'main',
+        image: 'ev/effigy.jpg',
       },
       {
         time: '23:30–00:30',
@@ -174,6 +190,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Ночной пир сразу после церемонии: DJ Red Dragon и DJ Tango «serving up some tasty beats». Танцуем до упаду, лапша на данс-флорах до 2:00.',
         kind: 'dance',
+        image: 'ev/sharkcuterie.jpg',
       },
     ],
   },
@@ -190,6 +207,7 @@ export const DAYS: FestivalDay[] = [
         place: 'Church of Respect',
         description: 'Воскресные блинчики от Джеффа.',
         kind: 'food',
+        image: 'ev/pancakes.jpg',
       },
       {
         time: '11:00–12:30',
@@ -198,6 +216,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'DJ Starrdust с хитами 80-х + drag-шоу Lesley Eve. Французские тосты, блины, мимозы — танцуем с вилкой в руке.',
         kind: 'dance',
+        image: 'ev/brunch.jpg',
       },
       {
         time: '13:00–14:30',
@@ -206,6 +225,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Чай, таро и «терапевтическое искусство слушания». Тепло и небольно для интровертов.',
         kind: 'event',
+        image: 'ev/teamonk.jpg',
       },
       {
         time: '13:00–15:00',
@@ -214,6 +234,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Разбираем и пересобираем плюшевых мишек во франкенштейнов. Весёлое парное безумие.',
         kind: 'event',
+        image: 'ev/bear.jpg',
       },
       {
         time: '13:00–15:00',
@@ -222,6 +243,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Контактная импровизация от Cult Cafe — той же команды, что делала экстатик-данс в четверг. Свободное движение, ближайшее к экстатику в наши дни (сам Ecstatic Dance был в четверг до приезда). All levels welcome.',
         kind: 'dance',
+        image: 'ev/improv.jpg',
       },
       {
         time: '14:30–15:30',
@@ -230,6 +252,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Дегустация шоколада с завязанными глазами — сенсорика вместо слов.',
         kind: 'event',
+        image: 'ev/chocolate.jpg',
       },
       {
         time: '19:00',
@@ -244,6 +267,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Хранитель Храма: «невидимое служение» — тихое присутствие в сакральном пространстве, мягкая забота о людях в горе, свечи и безопасность. Вечером — закрывающий ритуал Храма. Трезвая смена. Говорить почти не нужно.',
         kind: 'shift',
+        image: 'ev/temple.jpg',
         booked: true,
       },
     ],
@@ -261,6 +285,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Leave No Trace: прочёсываем стоянку, забираем весь мусор до последней блёстки. Matter Out Of Place не оставляем.',
         kind: 'info',
+        image: 'ev/moop.png',
       },
       {
         time: 'День',

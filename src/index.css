@@ -211,6 +211,23 @@ body {
   background: rgba(224, 139, 184, 0.08);
 }
 
+.event-thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.event-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  background: var(--bg);
+}
+
 .event-time {
   min-width: 96px;
   font-weight: 700;
@@ -313,12 +330,17 @@ body {
 
 @media (max-width: 560px) {
   .event {
-    flex-direction: column;
-    gap: 6px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .event-time {
     min-width: 0;
+    align-self: center;
+  }
+
+  .event-body {
+    flex-basis: 100%;
   }
 
   .hero h1 {
