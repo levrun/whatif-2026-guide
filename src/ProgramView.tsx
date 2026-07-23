@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { PROGRAM, type ProgramEvent } from './programData'
 import { PROGRAM_RU } from './programRu'
 import { GLOSSARY } from './glossary'
+import { autoTag, TAG_META, type Tag } from './tags'
 
 const DAY_LABELS: Record<ProgramEvent['day'], string> = {
   Thursday: 'Чт 23.07',
@@ -35,6 +36,23 @@ const PICKS: Record<string, string> = {
   'Chocolate Ceremonies': 'шоколад вслепую — сенсорика вместо слов',
 }
 
+// Наше время: Пт с 15:00 (приезд), но Gate Crew 20:00-23:30 = занят.
+// Сб — весь день свободен. Вс — свободен, но Temple 20:00-23:00 = занят.
+function isOurTime(e: ProgramEvent): boolean {
+  const [start] = getTimeRange(e.time)
+  if (start < 0) return true // All Day — показываем
+  if (e.day === 'Thursday') return false // ещё не приехали
+  if (e.day === 'Monday') return false // уезжаем
+  if (e.day === 'Friday') {
+    if (start < 15 * 60) return false // до 15:00 — в дороге
+    if (start >= 20 * 60 && start < 23.5 * 60) return false // Gate Crew
+  }
+  if (e.day === 'Sunday') {
+    if (start >= 20 * 60 && start < 23 * 60) return false // Temple Guardians
+  }
+  return true
+}
+
 function parseMin(t: string): number {
   const s = t.trim().toLowerCase()
   if (s === 'all day' || s.startsWith('-')) return -1
@@ -56,7 +74,7 @@ function getTimeRange(t: string): [number, number] {
   if (parts.length < 2) return [parseMin(t), parseMin(t) + 60]
   const s = parseMin(parts[0])
   let e = parseMin(parts[1])
-  if (e <= s && e >= 0) e += 12 * 60 // overnight
+  if (e <= s && e >= 0) e += 12 * 60
   return [s, e]
 }
 
@@ -100,22 +118,38 @@ interface Props {
 export default function ProgramView({ onShowMap }: Props) {
   const [day, setDay] = useState<ProgramEvent['day']>('Friday')
   const [onlyPicks, setOnlyPicks] = useState(false)
+  const [onlyOurTime, setOnlyOurTime] = useState(false)
+  const [activeTags, setActiveTags] = useState<Tag[]>([])
   const [query, setQuery] = useState('')
+
+  const toggleTag = (t: Tag) => {
+    setActiveTags((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t])
+  }
+
+  // Pre-compute tags for all events
+  const eventTags = useMemo(() => PROGRAM.map((e) => autoTag(e.title, e.desc)), [])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return PROGRAM.filter((e) => {
+    return PROGRAM.map((e, i) => ({ e, i })).filter(({ e, i }) => {
       if (e.day !== day) return false
       if (onlyPicks && !(e.title in PICKS)) return false
-      if (q && !(e.title + ' ' + (e.venue ?? '') + ' ' + e.desc).toLowerCase().includes(q)) return false
+      if (onlyOurTime && !isOurTime(e)) return false
+      if (activeTags.length > 0 && !activeTags.some((t) => eventTags[i].includes(t))) return false
+      if (q) {
+        const ru = PROGRAM_RU[e.title]
+        const ruText = ru ? ru.ru + ' ' + (ru.story || '') : ''
+        const hay = (e.title + ' ' + (e.venue ?? '') + ' ' + e.desc + ' ' + ruText).toLowerCase()
+        if (!hay.includes(q)) return false
+      }
       return true
     })
-  }, [day, onlyPicks, query])
+  }, [day, onlyPicks, onlyOurTime, activeTags, query, eventTags])
 
-  // Group events into time slots to show overlaps
+  // Group by time overlap
   const grouped = useMemo(() => {
-    const groups: { events: ProgramEvent[]; overlapCount: number }[] = []
-    const ranges = filtered.map((e) => getTimeRange(e.time))
+    const groups: { items: typeof filtered; overlapCount: number }[] = []
+    const ranges = filtered.map(({ e }) => getTimeRange(e.time))
     const visited = new Set<number>()
     for (let i = 0; i < filtered.length; i++) {
       if (visited.has(i)) continue
@@ -125,7 +159,7 @@ export default function ProgramView({ onShowMap }: Props) {
         if (visited.has(j)) continue
         if (overlaps(ranges[i], ranges[j])) { group.push(j); visited.add(j) }
       }
-      groups.push({ events: group.map((idx) => filtered[idx]), overlapCount: group.length })
+      groups.push({ items: group.map((idx) => filtered[idx]), overlapCount: group.length })
     }
     return groups
   }, [filtered])
@@ -133,10 +167,8 @@ export default function ProgramView({ onShowMap }: Props) {
   return (
     <div className="program">
       <p className="program-note">
-        Полная программа (180 событий). <b>Навёл</b> на название — увидишь русский перевод.{' '}
-        <span className="glossary-word" title="подчёркнутые слова — бёрн-термины с переводом">Подчёркнутые слова</span>
-        {' '}в описаниях тоже переводятся при наведении.
-        Цветная полоска слева объединяет одновременные события.
+        180 событий. Навёл на заголовок — русский перевод. <span className="glossary-word" title="подчёркнутые слова переводятся при наведении">Подчёркнутые слова</span> — тоже.
+        Оранжевая полоска слева = одновременные события.
       </p>
 
       <div className="day-filter program-days">
@@ -150,28 +182,44 @@ export default function ProgramView({ onShowMap }: Props) {
       <div className="program-controls">
         <input
           className="program-search"
-          placeholder="Поиск: yoga, dance, food…"
+          placeholder="Поиск: yoga, dance, танцы, еда…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <button className={onlyPicks ? 'day-btn active' : 'day-btn'} onClick={() => setOnlyPicks(!onlyPicks)}>
+      </div>
+
+      <div className="program-tags">
+        <button className={onlyOurTime ? 'tag-btn tag-active' : 'tag-btn'} onClick={() => setOnlyOurTime(!onlyOurTime)}>
+          🕐 Наше время
+        </button>
+        <button className={onlyPicks ? 'tag-btn tag-active' : 'tag-btn'} onClick={() => setOnlyPicks(!onlyPicks)}>
           ⭐ Рекомендации
         </button>
+        {(Object.keys(TAG_META) as Tag[]).map((t) => (
+          <button
+            key={t}
+            className={activeTags.includes(t) ? 'tag-btn tag-active' : 'tag-btn'}
+            onClick={() => toggleTag(t)}
+          >
+            {TAG_META[t].emoji} {TAG_META[t].label}
+          </button>
+        ))}
       </div>
 
       <div className="program-list">
         {filtered.length === 0 && (
-          <p className="program-empty">Ничего не нашлось — попробуй другой день или сбрось поиск.</p>
+          <p className="program-empty">Ничего не нашлось — попробуй другой день или сбрось фильтры.</p>
         )}
         {grouped.map((g, gi) => (
           <div key={gi} className={`prog-group ${g.overlapCount > 1 ? 'prog-overlap' : ''}`}>
             {g.overlapCount > 1 && (
-              <div className="prog-overlap-bar" title={`${g.overlapCount} одновременных событий — выбирай!`} />
+              <div className="prog-overlap-bar" title={`${g.overlapCount} одновременных — выбирай!`} />
             )}
             <div className="prog-group-events">
-              {g.events.map((e, ei) => {
+              {g.items.map(({ e, i: globalIdx }, ei) => {
                 const pick = PICKS[e.title]
                 const ru = PROGRAM_RU[e.title]
+                const tags = eventTags[globalIdx]
                 const titleTip = ru ? `🇷🇺 ${ru.ru}${ru.story ? '\n\n📖 ' + ru.story : ''}` : undefined
                 return (
                   <div key={`${gi}-${ei}`} className={`prog-event ${pick ? 'prog-pick' : ''}`}>
@@ -185,6 +233,13 @@ export default function ProgramView({ onShowMap }: Props) {
                         </span>
                       </div>
                       {pick && <div className="prog-pick-note">💡 {pick}</div>}
+                      {tags.length > 0 && (
+                        <div className="prog-tags-row">
+                          {tags.map((t) => (
+                            <span key={t} className="prog-tag">{TAG_META[t].emoji}</span>
+                          ))}
+                        </div>
+                      )}
                       {e.venue && (
                         <div className="prog-venue">
                           📍 {e.venue}
