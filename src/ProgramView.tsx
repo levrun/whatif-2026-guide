@@ -4,6 +4,14 @@ import { PROGRAM_RU } from './programRu'
 import { GLOSSARY } from './glossary'
 import { autoTag, TAG_META, type Tag } from './tags'
 
+// Tap-friendly tooltip: своё окошко вместо нативного title (который не работает на тач-экранах)
+interface PopupState {
+  text: string
+  x: number
+  y: number
+  above: boolean
+}
+
 const DAY_LABELS: Record<ProgramEvent['day'], string> = {
   Thursday: 'Чт 23.07',
   Friday: 'Пт 24.07',
@@ -83,7 +91,10 @@ function overlaps(a: [number, number], b: [number, number]): boolean {
   return a[0] < b[1] && b[0] < a[1]
 }
 
-function annotateDesc(text: string): (string | React.ReactElement)[] {
+function annotateDesc(
+  text: string,
+  showPopup: (text: string, ev: React.MouseEvent) => void,
+): (string | React.ReactElement)[] {
   const parts: (string | React.ReactElement)[] = []
   let remaining = text
   let keyIdx = 0
@@ -101,9 +112,16 @@ function annotateDesc(text: string): (string | React.ReactElement)[] {
     if (earliest < 0) { parts.push(remaining); break }
     if (earliest > 0) parts.push(remaining.slice(0, earliest))
     const [, ru] = GLOSSARY[matchIdx]
+    const word = remaining.slice(earliest, earliest + matchLen)
     parts.push(
-      <span key={keyIdx++} className="glossary-word" title={ru}>
-        {remaining.slice(earliest, earliest + matchLen)}
+      <span
+        key={keyIdx++}
+        className="glossary-word"
+        onClick={(ev) => { ev.stopPropagation(); showPopup(`${word} — ${ru}`, ev) }}
+        onMouseEnter={(ev) => showPopup(`${word} — ${ru}`, ev)}
+        onMouseLeave={() => showPopup('', undefined as unknown as React.MouseEvent)}
+      >
+        {word}
       </span>
     )
     remaining = remaining.slice(earliest + matchLen)
@@ -121,6 +139,19 @@ export default function ProgramView({ onShowMap }: Props) {
   const [onlyOurTime, setOnlyOurTime] = useState(false)
   const [activeTags, setActiveTags] = useState<Tag[]>([])
   const [query, setQuery] = useState('')
+  const [popup, setPopup] = useState<PopupState | null>(null)
+
+  const showPopup = (text: string, ev?: React.MouseEvent) => {
+    if (!text || !ev) { setPopup(null); return }
+    const rect = (ev.target as HTMLElement).getBoundingClientRect()
+    const above = rect.bottom > window.innerHeight - 200
+    setPopup({
+      text,
+      x: Math.max(8, Math.min(rect.left, window.innerWidth - 300)),
+      y: above ? rect.top + window.scrollY - 6 : rect.bottom + window.scrollY + 6,
+      above,
+    })
+  }
 
   const toggleTag = (t: Tag) => {
     setActiveTags((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t])
@@ -167,7 +198,7 @@ export default function ProgramView({ onShowMap }: Props) {
   return (
     <div className="program">
       <p className="program-note">
-        180 событий. Навёл на заголовок — русский перевод. <span className="glossary-word" title="подчёркнутые слова переводятся при наведении">Подчёркнутые слова</span> — тоже.
+        180 событий. Тапни (или наведи мышь) на заголовок — русский перевод; на подчёркнутое слово — перевод термина.
         Оранжевая полоска слева = одновременные события.
       </p>
 
@@ -226,7 +257,16 @@ export default function ProgramView({ onShowMap }: Props) {
                     <div className="prog-time">{e.time === 'All Day' ? 'Весь день' : e.time}</div>
                     <div className="prog-body">
                       <div className="prog-title-row">
-                        <span className="prog-title" title={titleTip}>
+                        <span
+                          className={ru ? 'prog-title prog-title-ru' : 'prog-title'}
+                          onClick={(ev) => {
+                            if (!titleTip) return
+                            ev.stopPropagation()
+                            showPopup(popup?.text === titleTip ? '' : titleTip, ev)
+                          }}
+                          onMouseEnter={(ev) => titleTip && showPopup(titleTip, ev)}
+                          onMouseLeave={() => setPopup(null)}
+                        >
                           {pick && '⭐ '}
                           {e.title}
                           {ru && <span className="badge badge-ru">🇷🇺</span>}
@@ -251,7 +291,7 @@ export default function ProgramView({ onShowMap }: Props) {
                           )}
                         </div>
                       )}
-                      <div className="prog-desc">{annotateDesc(e.desc)}</div>
+                      <div className="prog-desc">{annotateDesc(e.desc, showPopup)}</div>
                     </div>
                   </div>
                 )
@@ -260,6 +300,17 @@ export default function ProgramView({ onShowMap }: Props) {
           </div>
         ))}
       </div>
+
+      {popup && (
+        <div
+          className={popup.above ? 'tooltip-popup tooltip-popup-above' : 'tooltip-popup'}
+          style={{ left: popup.x, top: popup.y }}
+          onClick={() => setPopup(null)}
+        >
+          {popup.text}
+        </div>
+      )}
+      {popup && <div className="tooltip-backdrop" onClick={() => setPopup(null)} />}
     </div>
   )
 }
