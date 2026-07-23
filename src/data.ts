@@ -8,6 +8,7 @@ export interface DayEvent {
   kind: EventKind
   booked?: boolean
   image?: string
+  mapId?: string
 }
 
 export interface FestivalDay {
@@ -34,6 +35,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Заезд через ворота: билеты, браслеты, проверка машины. Говорим «It’s our first burn!» — новичкам все рады.',
         kind: 'info',
+        mapId: 'flowhub',
         image: 'ev/arrival.png',
       },
       {
@@ -51,6 +53,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'В день смены кормят бесплатно: сначала берём Meal Sticker в Volunteer Hub, потом идём в Commissary.',
         kind: 'food',
+        mapId: 'commissary',
         image: 'ev/commissary.jpg',
       },
       {
@@ -60,6 +63,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Парный танец из Анголы для Кати и Лёши перед сменой: «Feel the energy, listen to the heart». Показывают с нуля.',
         kind: 'dance',
+        mapId: 'mysticlounge',
         image: 'ev/kizomba.png',
       },
       {
@@ -75,6 +79,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Встречаем приезжающих: проверка билетов, браслеты, «Welcome home!». Команда большая, английский простой и повторяющийся. Трезвая смена. Обучение на месте, до ворот довозят.',
         kind: 'shift',
+        mapId: 'flowhub',
         booked: true,
       },
       {
@@ -102,6 +107,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Французские тосты, блины, мимозы + drag-шоу. Можно просто смотреть.',
         kind: 'food',
+        mapId: 'aurora',
         image: 'ev/brunch.jpg',
       },
       {
@@ -111,6 +117,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Учат польке с нуля. «Партнёр не обязателен, есть бесконтактные варианты» — идеально для скромных.',
         kind: 'event',
+        mapId: 'boottifrutti',
         image: 'ev/polka.jpg',
       },
       {
@@ -119,6 +126,7 @@ export const DAYS: FestivalDay[] = [
         place: 'Слева от Battery Library (North Camp #1)',
         description: 'Пакеты по 7 фунтов, разбирают за час. Приходить к 12:00.',
         kind: 'info',
+        mapId: 'ice',
         image: 'ev/ice.jpg',
       },
       {
@@ -128,6 +136,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Танцы под DJ и живую MEWзыку со снежными конусами. Свободный непарный дэнс — заходим когда хотим.',
         kind: 'dance',
+        mapId: 'penguins',
         image: 'ev/snowcone.jpg',
       },
       {
@@ -137,6 +146,7 @@ export const DAYS: FestivalDay[] = [
         description:
           '«Shake what your mama gave yah!» — beginner friendly, весёлый и непарный урок тверка от Kelsey и Zara.',
         kind: 'dance',
+        mapId: 'sillyhat',
         image: 'ev/twerkshop.jpg',
       },
       {
@@ -146,6 +156,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Матрасы дают, призы и фризи. Знакомство через игру — английский не нужен.',
         kind: 'event',
+        mapId: 'bridge',
         image: 'ev/floatie.jpg',
       },
       {
@@ -155,6 +166,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Парные танцы в носках в уютном крытом данс-спейсе — для настроения «иногда в паре можно». Показывают с нуля.',
         kind: 'dance',
+        mapId: 'catspajamas',
         image: 'ev/fusion.jpg',
       },
       {
@@ -164,6 +176,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Тема года — «What If: Cat If?» 🐱. Делаем ушки/хвосты — готовим костюмы к вечерней церемонии.',
         kind: 'event',
+        mapId: 'centrecamp',
         image: 'ev/kitten.jpg',
       },
       {
@@ -172,6 +185,7 @@ export const DAYS: FestivalDay[] = [
         place: 'Silly Hat Society',
         description: 'Разогрев перед церемонией: Vene C → Nix → Matty Reed.',
         kind: 'dance',
+        mapId: 'sillyhat',
         image: 'ev/djlineup.jpg',
       },
       {
@@ -181,6 +195,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Кульминация фестиваля: перформанс, поднятие рук «the Man», LED-шоу вместо огня (сжигать нельзя по договору с площадкой) — и сразу афтепати: «shake your booty during the Effigy afterparty!»',
         kind: 'main',
+        mapId: 'effigy',
         image: 'ev/effigy.jpg',
       },
       {
@@ -190,6 +205,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Ночной пир сразу после церемонии: DJ Red Dragon и DJ Tango «serving up some tasty beats». Танцуем до упаду, лапша на данс-флорах до 2:00.',
         kind: 'dance',
+        mapId: 'ravebots',
         image: 'ev/sharkcuterie.jpg',
       },
     ],
@@ -207,6 +223,7 @@ export const DAYS: FestivalDay[] = [
         place: 'Church of Respect',
         description: 'Воскресные блинчики от Джеффа.',
         kind: 'food',
+        mapId: 'church',
         image: 'ev/pancakes.jpg',
       },
       {
@@ -216,6 +233,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'DJ Starrdust с хитами 80-х + drag-шоу Lesley Eve. Французские тосты, блины, мимозы — танцуем с вилкой в руке.',
         kind: 'dance',
+        mapId: 'aurora',
         image: 'ev/brunch.jpg',
       },
       {
@@ -234,6 +252,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Разбираем и пересобираем плюшевых мишек во франкенштейнов. Весёлое парное безумие.',
         kind: 'event',
+        mapId: 'cottage',
         image: 'ev/bear.jpg',
       },
       {
@@ -243,6 +262,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Контактная импровизация от Cult Cafe — той же команды, что делала экстатик-данс в четверг. Свободное движение, ближайшее к экстатику в наши дни (сам Ecstatic Dance был в четверг до приезда). All levels welcome.',
         kind: 'dance',
+        mapId: 'cultcafe',
         image: 'ev/improv.jpg',
       },
       {
@@ -252,6 +272,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Дегустация шоколада с завязанными глазами — сенсорика вместо слов.',
         kind: 'event',
+        mapId: 'feverdream',
         image: 'ev/chocolate.jpg',
       },
       {
@@ -267,6 +288,7 @@ export const DAYS: FestivalDay[] = [
         description:
           'Хранитель Храма: «невидимое служение» — тихое присутствие в сакральном пространстве, мягкая забота о людях в горе, свечи и безопасность. Вечером — закрывающий ритуал Храма. Трезвая смена. Говорить почти не нужно.',
         kind: 'shift',
+        mapId: 'temple',
         image: 'ev/temple.jpg',
         booked: true,
       },

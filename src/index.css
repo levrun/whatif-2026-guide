@@ -118,6 +118,87 @@ body {
   font-weight: 600;
 }
 
+/* Tabs */
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 6px;
+}
+
+.tab-btn {
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1c110a;
+}
+
+/* Map */
+.map-wrap {
+  margin-top: 14px;
+}
+
+.map-container {
+  width: 100%;
+  height: 72vh;
+  min-height: 420px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #f6f2ec;
+}
+
+.map-hint {
+  color: var(--muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.map-hint a {
+  color: var(--accent);
+}
+
+.map-pin {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.map-link {
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.map-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 /* Day filter */
 .day-filter {
   display: flex;

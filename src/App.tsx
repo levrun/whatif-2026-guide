@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { DAYS, GUIDES, type DayEvent } from './data'
+import MapView from './MapView'
 
 const KIND_META: Record<DayEvent['kind'], { label: string; className: string }> = {
   shift: { label: 'Смена', className: 'badge badge-shift' },
@@ -10,7 +11,7 @@ const KIND_META: Record<DayEvent['kind'], { label: string; className: string }> 
   dance: { label: 'Танцы', className: 'badge badge-dance' },
 }
 
-function EventCard({ ev }: { ev: DayEvent }) {
+function EventCard({ ev, onShowMap }: { ev: DayEvent; onShowMap: (id: string) => void }) {
   const meta = KIND_META[ev.kind]
   return (
     <div className={`event ${ev.kind === 'shift' ? 'event-shift' : ''} ${ev.kind === 'main' ? 'event-main' : ''} ${ev.kind === 'dance' ? 'event-dance' : ''}`}>
@@ -35,6 +36,11 @@ function EventCard({ ev }: { ev: DayEvent }) {
         </div>
         {ev.place && <div className="event-place">📍 {ev.place}</div>}
         <div className="event-desc">{ev.description}</div>
+        {ev.mapId && (
+          <button className="map-link" onClick={() => onShowMap(ev.mapId!)}>
+            🗺️ Показать на карте
+          </button>
+        )}
       </div>
     </div>
   )
@@ -42,7 +48,16 @@ function EventCard({ ev }: { ev: DayEvent }) {
 
 export default function App() {
   const [activeDay, setActiveDay] = useState<string>('all')
+  const [tab, setTab] = useState<'schedule' | 'map'>('schedule')
+  const [focusId, setFocusId] = useState<string | null>(null)
+
   const visibleDays = activeDay === 'all' ? DAYS : DAYS.filter((d) => d.id === activeDay)
+
+  const showOnMap = (id: string) => {
+    setFocusId(id)
+    setTab('map')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <div className="page">
@@ -57,72 +72,93 @@ export default function App() {
         </p>
       </header>
 
-      <section className="guides">
-        <h2>📚 Официальные гайды (PDF)</h2>
-        <div className="guide-grid">
-          {GUIDES.map((g) => (
-            <a
-              key={g.file}
-              className="guide-card"
-              href={`${import.meta.env.BASE_URL}${g.file}`}
-              download={g.file}
-            >
-              <img
-                className="guide-thumb"
-                src={`${import.meta.env.BASE_URL}${g.image}`}
-                alt={g.title}
-                loading="lazy"
-              />
-              <div>
-                <div className="guide-title">
-                  {g.emoji} {g.title}
-                </div>
-                <div className="guide-desc">{g.description}</div>
-                <div className="guide-size">⬇️ Скачать PDF · {g.size}</div>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <nav className="day-filter">
+      <nav className="tab-bar">
         <button
-          className={activeDay === 'all' ? 'day-btn active' : 'day-btn'}
-          onClick={() => setActiveDay('all')}
+          className={tab === 'schedule' ? 'tab-btn active' : 'tab-btn'}
+          onClick={() => setTab('schedule')}
         >
-          Все дни
+          📅 Расписание
         </button>
-        {DAYS.map((d) => (
-          <button
-            key={d.id}
-            className={activeDay === d.id ? 'day-btn active' : 'day-btn'}
-            onClick={() => setActiveDay(d.id)}
-          >
-            {d.emoji} {d.weekday}
-          </button>
-        ))}
+        <button
+          className={tab === 'map' ? 'tab-btn active' : 'tab-btn'}
+          onClick={() => setTab('map')}
+        >
+          🗺️ Карта
+        </button>
       </nav>
 
-      <main>
-        {visibleDays.map((day) => (
-          <section key={day.id} className="day">
-            <div className="day-header">
-              <span className="day-emoji">{day.emoji}</span>
-              <div>
-                <h2>
-                  {day.weekday}, {day.date}
-                </h2>
-                <p className="day-sub">{day.subtitle}</p>
-              </div>
-            </div>
-            <div className="events">
-              {day.events.map((ev, i) => (
-                <EventCard key={i} ev={ev} />
+      {tab === 'map' ? (
+        <MapView focusId={focusId} />
+      ) : (
+        <>
+          <section className="guides">
+            <h2>📚 Официальные гайды (PDF)</h2>
+            <div className="guide-grid">
+              {GUIDES.map((g) => (
+                <a
+                  key={g.file}
+                  className="guide-card"
+                  href={`${import.meta.env.BASE_URL}${g.file}`}
+                  download={g.file}
+                >
+                  <img
+                    className="guide-thumb"
+                    src={`${import.meta.env.BASE_URL}${g.image}`}
+                    alt={g.title}
+                    loading="lazy"
+                  />
+                  <div>
+                    <div className="guide-title">
+                      {g.emoji} {g.title}
+                    </div>
+                    <div className="guide-desc">{g.description}</div>
+                    <div className="guide-size">⬇️ Скачать PDF · {g.size}</div>
+                  </div>
+                </a>
               ))}
             </div>
           </section>
-        ))}
-      </main>
+
+          <nav className="day-filter">
+            <button
+              className={activeDay === 'all' ? 'day-btn active' : 'day-btn'}
+              onClick={() => setActiveDay('all')}
+            >
+              Все дни
+            </button>
+            {DAYS.map((d) => (
+              <button
+                key={d.id}
+                className={activeDay === d.id ? 'day-btn active' : 'day-btn'}
+                onClick={() => setActiveDay(d.id)}
+              >
+                {d.emoji} {d.weekday}
+              </button>
+            ))}
+          </nav>
+
+          <main>
+            {visibleDays.map((day) => (
+              <section key={day.id} className="day">
+                <div className="day-header">
+                  <span className="day-emoji">{day.emoji}</span>
+                  <div>
+                    <h2>
+                      {day.weekday}, {day.date}
+                    </h2>
+                    <p className="day-sub">{day.subtitle}</p>
+                  </div>
+                </div>
+                <div className="events">
+                  {day.events.map((ev, i) => (
+                    <EventCard key={i} ev={ev} onShowMap={showOnMap} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </main>
+        </>
+      )}
 
       <footer className="footer">
         <p>
